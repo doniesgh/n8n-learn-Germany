@@ -1,0 +1,1212 @@
+{
+  "name": "RAG Deutsh Learning final version",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1f3a5daa-c68d-406e-a29c-cf43d4d9864b",
+      "name": "Démarrer manuellement",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -896,
+        912
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst urls = [\n  { url: \"https://www.dw.com/de/deutsch-lernen/s-2055\", level: \"A1-B2\", type: \"cours\" },\n \n];\n\nreturn urls.map(item => ({ json: item }));"
+      },
+      "id": "595ffa91-61f9-47f2-baf5-1434edb764ea",
+      "name": "Liste des sites (Code)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -672,
+        816
+      ]
+    },
+    {
+      "parameters": {
+        "chunkSize": 800,
+        "chunkOverlap": 100,
+        "options": {}
+      },
+      "id": "c14f5f58-a700-4e5e-8913-cb75cd20a95d",
+      "name": "Text Splitter (Web)",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        144,
+        1120
+      ]
+    },
+    {
+      "parameters": {
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "content",
+                "value": "={{ $json.output }}"
+              },
+              {
+                "name": "created_at",
+                "value": "= {{ $today }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "e8072df0-419e-4e4b-ac12-3ec97c7092fa",
+      "name": "Default Data Loader (Web)",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        992
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "agent_responses",
+          "mode": "list",
+          "cachedResultName": "agent_responses"
+        },
+        "options": {}
+      },
+      "id": "dfa55c8a-49da-4167-afe4-7b6c0c205d3e",
+      "name": "Supabase Vector Store - Insert (Web)",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        816
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "vUpRqPBItyPBT7Oy",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "german",
+        "filter": {
+          "whatToSearch": "files"
+        },
+        "options": {}
+      },
+      "id": "b5d11439-02c9-42e7-927f-bfe9f6c95505",
+      "name": "Lister fichiers Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -672,
+        1232
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "QREUMZGizpXPeKFX",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": ""
+        },
+        "options": {}
+      },
+      "id": "f240100a-5e14-4da9-bbb4-4b18cfe33aab",
+      "name": "Télécharger fichier",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -432,
+        1232
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "QREUMZGizpXPeKFX",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "id": "304519c0-95b5-4f17-ae1c-a775abdfe709",
+      "name": "Extraire texte (PDF/DOCX)",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        1232
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "content",
+              "type": "string",
+              "value": "={{ $json.text }}"
+            },
+            {
+              "name": "source_url",
+              "type": "string",
+              "value": "={{ 'drive:' + $('Lister fichiers Drive').item.json.name }}"
+            },
+            {
+              "name": "level",
+              "type": "string",
+              "value": "A_definir"
+            },
+            {
+              "name": "content_type",
+              "type": "string",
+              "value": "document_drive"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dd85071a-e7e7-4ac5-9fa5-b85453778aee",
+      "name": "Préparer métadonnées (Drive)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        32,
+        1232
+      ]
+    },
+    {
+      "parameters": {
+        "chunkSize": 800,
+        "chunkOverlap": 100,
+        "options": {}
+      },
+      "id": "2567142c-4cab-4951-bbac-46d74921f334",
+      "name": "Text Splitter (Drive)",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        560,
+        1552
+      ]
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.content }}",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "source",
+                "value": "={{ $json.source_url }}"
+              },
+              {
+                "name": "level",
+                "value": "={{ $json.level }}"
+              },
+              {
+                "name": "type",
+                "value": "={{ $json.content_type }}"
+              },
+              {
+                "name": "lang",
+                "value": "de"
+              }
+            ]
+          }
+        }
+      },
+      "id": "019779cd-5e66-4bbc-9152-5e2a09d7465e",
+      "name": "Default Data Loader (Drive)",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        400,
+        1424
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {
+          "queryName": ""
+        }
+      },
+      "id": "8fa73cc8-58af-481e-ace3-bf269f0647df",
+      "name": "Supabase Vector Store - Insert (Drive)",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1,
+      "position": [
+        368,
+        1232
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "vUpRqPBItyPBT7Oy",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "rag-deutsch-chat",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "24d22ae8-3bbe-4124-b8c7-27cd6bd4a2ca",
+      "name": "Webhook (App Web)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -896,
+        1680
+      ],
+      "webhookId": "rag-deutsch-chat"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "message",
+              "type": "string",
+              "value": "={{ $json.body.message }}",
+              "id": "9c22ca4f-65ed-4eae-a2d2-109ce408e984"
+            },
+            {
+              "name": "sessionId",
+              "type": "string",
+              "value": "={{ $json.body.sessionId }}",
+              "id": "75427666-c224-4d14-b019-819dd2a70a2e"
+            },
+            {
+              "id": "4bc1facf-ce30-41a6-a276-c95cf76fcc19",
+              "name": "level ",
+              "value": "={{ $json.body.level }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "22e4caff-9441-4885-8a7b-93bb421f0823",
+      "name": "Extraire Input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -416,
+        1664
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message }}",
+        "options": {
+          "systemMessage": "=You are a patient and encouraging German teacher.\nThe user is learning German.\nRules:\n- Use the German knowledge base to support explanations about German grammar, vocabulary, exercises, German culture, and simplified news.\n- When you need information from the knowledge base, use the Supabase Vector Store tool.\n- The Supabase Vector Store tool expects the search text in the \"input\" parameter.\n- Do not use \"query\" as a parameter for the Supabase Vector Store tool.\n- Adapt your language to the user's CEFR level: {{ $json['level '] }}\n- Gently correct mistakes when the user writes in German.\n- Give concrete examples and example sentences.\n- The user can receive responses in German, French, or English.\n- Respond in the same language used by the user unless they explicitly request another language.\n- If the user asks for an explanation in French or English, explain in that language while keeping German examples where appropriate."
+        }
+      },
+      "id": "a534f9c4-3fc3-483b-9a58-8d8bf490e8a2",
+      "name": "AI Agent (Prof d'allemand)",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -224,
+        1664
+      ]
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Extraire Input').item.json.sessionId }}",
+        "contextWindowLength": 15
+      },
+      "id": "75deb9a9-0593-44ad-bab1-fc2063f6d6b8",
+      "name": "Memory (par sessionId)",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -224,
+        1872
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "reply",
+              "type": "string",
+              "value": "={{ $json.output }}"
+            },
+            {
+              "name": "sessionId",
+              "type": "string",
+              "value": "={{ $('Extraire Input').item.json.sessionId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ecc43d0a-fe9e-4848-891f-93315c5d16b2",
+      "name": "Préparer réponse",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        96,
+        1664
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"reply\": $json.reply, \"sessionId\": $json.sessionId } }}",
+        "options": {}
+      },
+      "id": "f3bde037-6848-4d05-aaaf-1410c9785bd4",
+      "name": "Répondre à l'App Web",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [
+        336,
+        1664
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        256,
+        1424
+      ],
+      "id": "a152a44e-2d5f-497e-b192-3815a12efa47",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "AaE7pP81rDmCqdQM",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://mcp.firecrawl.dev/v2/mcp",
+        "authentication": "bearerAuth",
+        "include": "selected",
+        "includeTools": [
+          "firecrawl_search",
+          "firecrawl_scrape"
+        ],
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.4,
+      "position": [
+        -352,
+        1008
+      ],
+      "id": "4541d1ba-c179-4b34-b15d-d39f89829993",
+      "name": "MCP Client",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "trO1q2HG3uGadTJX",
+          "name": "Bearer Auth account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=crawl these websites {{ $json.url }}",
+        "options": {
+          "systemMessage": "You are a helpful **German language tutor and research agent**. Your task is to help the user learn German by understanding their question and providing clear, accurate, practical, and learner-friendly explanations.\n\nYour main focus is **German language learning**, including:\n\n* Vocabulary and word meanings\n* German grammar\n* Articles and grammatical gender\n* Nouns and plural forms\n* Cases: Nominativ, Akkusativ, Dativ, Genitiv\n* Verbs and conjugation\n* Separable and inseparable verbs\n* Modal verbs\n* Tenses\n* Sentence structure and word order\n* Adjectives and adjective endings\n* Prepositions\n* Pronouns\n* Questions and negation\n* Adverbs and conjunctions\n* Common expressions and phrases\n* Formal and informal German\n* Everyday conversations\n* Reading comprehension\n* Listening comprehension\n* German pronunciation\n* German spelling\n* German culture and language usage\n* German news and \"Leichte Sprache\"\n\n### Learning levels\n\nAdapt your explanations to the user's apparent **CEFR level**:\n\n* A1 — Beginner\n* A2 — Elementary\n* B1 — Intermediate\n* B2 — Upper-intermediate\n* C1 — Advanced\n* C2 — Proficient\n\nIf the user's level is unknown, use simple language and examples appropriate for a beginner/intermediate learner.\n\nWhen explaining a German word, provide useful information when available:\n\n* German word\n* English meaning\n* Part of speech\n* Gender for nouns\n* Plural for nouns\n* Verb forms for verbs\n* Pronunciation when relevant\n* Synonyms\n* Antonyms\n* Common expressions\n* Example sentences\n* Typical context of usage\n* CEFR level when available\n\n### Research and RAG knowledge\n\nWhen answering questions, use the available RAG knowledge base and retrieved information from the German-learning sources.\n\nImportant sources include:\n\n* Deutsche Welle — Deutsch lernen\n* Goethe-Institut\n* DW Learn German / Nico's Weg\n* Deutsche Grammatik 2.0\n* Duden\n* Tagesschau Leichte Sprache\n* German Wiktionary\n\nWhen a question requires external or up-to-date information, use the most relevant available tool.\n\nFor web research, use the **Firecrawl Search tool** to find reliable and relevant German-learning resources, explanations, examples, or current German-language content.\n\nPrefer authoritative sources such as **Duden, Goethe-Institut, Deutsche Welle, and Wiktionary** when appropriate.\n\nDo not use tools unnecessarily.\n\nBase your response on information available from the user, the RAG knowledge base, and retrieved sources.\n\nDo not invent facts, definitions, grammar rules, examples, sources, or word meanings.\n\n### Teaching style\n\nAct as a patient German teacher.\n\nWhen useful:\n\n* Explain German concepts in simple English.\n* Show the German examples clearly.\n* Translate important examples into English.\n* Highlight important vocabulary.\n* Explain why a sentence is structured in a particular way.\n* Compare similar German words when this helps avoid confusion.\n* Point out common learner mistakes.\n* Give short exercises when appropriate.\n* Encourage active learning rather than simply giving the answer.\n\nFor example, when explaining a grammar concept, prefer a structure such as:\n\n**Rule → Explanation → Examples → Common mistake → Practice**\n\n### Vocabulary questions\n\nWhen the user asks about vocabulary, do not only provide a translation.\n\nExplain the word in context and, when relevant, include:\n\n**Word:**\n**Meaning:**\n**Word type:**\n**Gender:**\n**Plural:**\n**Example:**\n**Translation:**\n**Related words:**\n**Common expressions:**\n\nOnly include fields that are relevant and supported by the available information.\n\n### Grammar questions\n\nWhen the user asks about grammar:\n\n1. Explain the rule clearly.\n2. Give simple German examples.\n3. Provide English translations when useful.\n4. Explain important exceptions.\n5. Give a short practice exercise when appropriate.\n\nAvoid unnecessarily complicated linguistic terminology unless the user asks for a technical explanation.\n\n### Corrections\n\nIf the user writes something in German and asks for correction:\n\n* Show the corrected German.\n* Explain the important mistakes.\n* Explain why the correction is needed.\n* Preserve the user's intended meaning.\n* Do not criticize the learner.\n\nFocus on helping the user understand the correction so they can avoid the same mistake later.\n\n### Code\n\nDo not focus on programming or Python unless the user explicitly asks about it.\n\nWhen the user provides German text, prioritize language-learning assistance such as:\n\n* Translation\n* Grammar analysis\n* Vocabulary extraction\n* Sentence structure\n* Corrections\n* CEFR-level assessment\n* Comprehension questions\n\n### Exercises\n\nWhen appropriate, create exercises based on the user's current topic.\n\nExamples include:\n\n* Fill in the blank\n* Multiple choice\n* Translation\n* Word ordering\n* Verb conjugation\n* Article selection\n* Case exercises\n* Vocabulary quizzes\n* Sentence correction\n* Reading comprehension\n\nDo not immediately reveal the answers if the user is clearly trying to practice. Give the exercise first and provide corrections or answers afterward.\n\n### Source accuracy\n\nIf information comes from the RAG knowledge base or external sources, remain faithful to those sources.\n\nIf sources disagree, explain the difference instead of pretending there is one definitive answer.\n\nIf the available information is insufficient or uncertain, clearly state the limitation rather than guessing.\n\nAlways distinguish between:\n\n* A strict grammar rule\n* A common usage\n* A regional variation\n* A colloquial expression\n* An informal expression\n* A context-dependent meaning\n\n### Response style\n\nKeep explanations clear, practical, and appropriate for the user's learning level.\n\nUse German examples whenever possible.\n\nFor difficult concepts, break the explanation into small steps.\n\nDo not overwhelm a beginner with unnecessary advanced information.\n\nIf the user asks for an advanced explanation, provide more technical detail.\n\nReturn only the final answer to the user.\n\nDo not describe your internal reasoning or tool usage.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -496,
+        816
+      ],
+      "id": "bfeb7b68-030b-473f-966d-3eb2fbab155b",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-20b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        1008
+      ],
+      "id": "a9fe41b1-c468-4f34-ab02-4f8d8d9092d9",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "cEDLI3LsMwtm2vSu",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        992
+      ],
+      "id": "48e00927-dfed-4a83-89a8-8feeddbe0e1b",
+      "name": "Embeddings Google Gemini1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "AaE7pP81rDmCqdQM",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        1872
+      ],
+      "id": "71b0d767-9a6c-4653-9690-8bcc1269488a",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "cEDLI3LsMwtm2vSu",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Search the German knowledge base (grammar, vocabulary, exercises, simplified news). Use this tool for any question about German grammar, conjugation, vocabulary, or German culture.\n",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        -96,
+        1872
+      ],
+      "id": "dcfa5926-4c0a-47d8-8b91-3102f42e612a",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "vUpRqPBItyPBT7Oy",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Search the German knowledge base (grammar, vocabulary, exercises, simplified news). Use this tool for any question about German grammar, conjugation, vocabulary, or German culture.\n",
+        "tableName": {
+          "__rl": true,
+          "value": "agent_responses",
+          "mode": "list",
+          "cachedResultName": "agent_responses"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        176,
+        1872
+      ],
+      "id": "ca7c7d9c-a85f-42ca-a419-0c20ba35aa6f",
+      "name": "Supabase Vector Store1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "vUpRqPBItyPBT7Oy",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        2064
+      ],
+      "id": "9c7ed985-f9b7-4355-91c3-4baf49af7c9f",
+      "name": "Embeddings Google Gemini2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "AaE7pP81rDmCqdQM",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        176,
+        2048
+      ],
+      "id": "02edeb5d-1a19-4e58-be9b-9d569724a79a",
+      "name": "Embeddings Google Gemini3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "AaE7pP81rDmCqdQM",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.action }}",
+                    "rightValue": "chat",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "ecd316bf-7282-4e09-ae08-785d240266dc"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c7a2b7b8-652f-43b5-8983-a73836bf464b",
+                    "leftValue": "={{ $json.body.action }}",
+                    "rightValue": "translate",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -688,
+        1680
+      ],
+      "id": "852c9b69-7be7-4dcd-b9cc-97fe16703eae",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "message",
+              "type": "string",
+              "value": "={{ $json.body.message }}",
+              "id": "9c22ca4f-65ed-4eae-a2d2-109ce408e984"
+            },
+            {
+              "name": "sessionId",
+              "type": "string",
+              "value": "={{ $json.body.sessionId }}",
+              "id": "75427666-c224-4d14-b019-819dd2a70a2e"
+            },
+            {
+              "id": "4bc1facf-ce30-41a6-a276-c95cf76fcc19",
+              "name": "level ",
+              "value": "={{ $json.body.level }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9f8ce6fc-7290-43d4-a773-4e6dca2138c8",
+      "name": "Extraire Input1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -400,
+        2288
+      ]
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        2528
+      ],
+      "id": "4a8a5ed6-7698-4a15-9fc0-3ecf15d6b6f4",
+      "name": "Groq Chat Model2",
+      "credentials": {
+        "groqApi": {
+          "id": "cEDLI3LsMwtm2vSu",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Translate text between German, English, and French using LibreTranslate. Use this when the user asks to translate a word, phrase, or sentence, or wants a translation checked. source_lang and target_lang must each be one of: de, en, fr.",
+        "url": "=https://api.mymemory.translated.net/get",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ $fromAI('text', 'Text to translate') }}"
+            },
+            {
+              "name": "langpair",
+              "value": "={{ $fromAI('languages', 'Language pair such as de|en') }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.5,
+      "position": [
+        64,
+        2528
+      ],
+      "id": "4c798822-23b9-4e53-a980-ab4fbdf15fe5",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message }}",
+        "options": {
+          "systemMessage": "=You are a helpful German translation assistant.\n\nThe user is learning German and can communicate in German, French, or English.\n\nWhen the user asks for a translation, ALWAYS use the HTTP Request tool.\n\nThe HTTP Request tool connects to the MyMemory Translation API.\n\nThe tool accepts:\n- text: the exact text to translate\n- langpair: source and target language in the format source|target\n\nLanguage codes:\n- de = German\n- en = English\n- fr = French\n\nRules:\n- If the user asks for German, use de.\n- If the user asks for English, use en.\n- If the user asks for French, use fr.\n- If the target language is not specified, use de.\n- Determine the source language from the user's text.\n- Preserve the original meaning, tone, and formatting.\n- ALWAYS call the HTTP Request tool for translation requests.\n- Do not translate the text yourself.\n- Do not use Supabase Vector Store for translation requests.\n\nAfter calling the HTTP Request tool:\n- Read the translatedText returned by the tool.\n- Return that translation to the user.\n- Do not return the internal API response.\n- Do not return JSON unless explicitly requested by the user.\n\nFor non-translation questions, answer normally.\n\nAdapt explanations to the user's CEFR level:\n{{ $json['level '] }}"
+        }
+      },
+      "id": "ea52c41b-4141-442b-a638-6e8e85b0774b",
+      "name": "AI Agent translate",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -176,
+        2288
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "reply",
+              "type": "string",
+              "value": "={{ $json.output }}",
+              "id": "62646a51-d199-4933-b51b-a6fc196dd290"
+            },
+            {
+              "name": "sessionId",
+              "type": "string",
+              "value": "={{ $('Extraire Input1').item.json.sessionId }}",
+              "id": "73da08f5-f1b2-4f4a-8610-15f7dd6558fb"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "de647a9e-51de-4567-acd5-57cac2768307",
+      "name": "Préparer réponse1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        160,
+        2288
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"reply\": $json.reply, \"sessionId\": $json.sessionId } }}",
+        "options": {}
+      },
+      "id": "dc75ac21-98a3-49b0-b553-80d374bee602",
+      "name": "Répondre à l'App Web1",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [
+        352,
+        2288
+      ]
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.sessionId }}",
+        "contextWindowLength": 15
+      },
+      "id": "d7e3366c-d728-4a72-b673-b51e2b632123",
+      "name": "Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -80,
+        2528
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Démarrer manuellement": {
+      "main": [
+        [
+          {
+            "node": "Liste des sites (Code)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Lister fichiers Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Liste des sites (Code)": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Splitter (Web)": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader (Web)",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader (Web)": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store - Insert (Web)",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lister fichiers Drive": {
+      "main": [
+        [
+          {
+            "node": "Télécharger fichier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Télécharger fichier": {
+      "main": [
+        [
+          {
+            "node": "Extraire texte (PDF/DOCX)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraire texte (PDF/DOCX)": {
+      "main": [
+        [
+          {
+            "node": "Préparer métadonnées (Drive)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer métadonnées (Drive)": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store - Insert (Drive)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Splitter (Drive)": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader (Drive)",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader (Drive)": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store - Insert (Drive)",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook (App Web)": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraire Input": {
+      "main": [
+        [
+          {
+            "node": "AI Agent (Prof d'allemand)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent (Prof d'allemand)": {
+      "main": [
+        [
+          {
+            "node": "Préparer réponse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory (par sessionId)": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent (Prof d'allemand)",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer réponse": {
+      "main": [
+        [
+          {
+            "node": "Répondre à l'App Web",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store - Insert (Drive)",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store - Insert (Web)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store - Insert (Web)",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent (Prof d'allemand)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent (Prof d'allemand)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent (Prof d'allemand)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini2": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini3": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Extraire Input",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extraire Input1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraire Input1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent translate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent translate",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent translate",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent translate": {
+      "main": [
+        [
+          {
+            "node": "Préparer réponse1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Préparer réponse1": {
+      "main": [
+        [
+          {
+            "node": "Répondre à l'App Web1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent translate",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "717d59fd-5ce3-425f-9274-5f8c5fc4c5f5",
+  "meta": {
+    "instanceId": "70f837636873cc24eacd6335f13fb3973fb32dd956371a683ea51aaa7042e578"
+  },
+  "nodeGroups": [],
+  "id": "JFkkYrqZDXHuIKuM",
+  "tags": []
+}

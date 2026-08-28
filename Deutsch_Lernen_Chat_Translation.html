@@ -1,0 +1,2494 @@
+
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Deutsch Lernen — Assistant IA</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+  --bg:#f5f7fb;
+  --panel:#ffffff;
+  --panel-soft:#f8faff;
+
+  --ink:#172033;
+  --ink-soft:#344054;
+
+  --blau:#173f7a;
+  --blau-dark:#0e2a52;
+  --blau-light:#eaf1fb;
+
+  --rot:#e63946;
+  --rot-light:#fff0f1;
+
+  --gelb:#f7c948;
+  --gelb-light:#fff8dc;
+
+  --gruen:#22a06b;
+  --gruen-light:#eaf9f2;
+
+  --muted:#788398;
+  --border:#e3e8f0;
+
+  --shadow-sm:0 4px 14px rgba(23,32,51,.06);
+  --shadow:0 12px 35px rgba(23,32,51,.10);
+  --shadow-lg:0 20px 55px rgba(23,32,51,.14);
+
+  --radius:16px;
+  --radius-sm:11px;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  height:100%;
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(247,201,72,.13), transparent 25%),
+    radial-gradient(circle at 95% 10%, rgba(23,63,122,.10), transparent 28%),
+    var(--bg);
+
+  color:var(--ink);
+
+  font-family:'Poppins',sans-serif;
+
+  display:flex;
+  flex-direction:column;
+
+  min-height:100vh;
+}
+
+::selection{
+  background:var(--gelb);
+  color:var(--ink);
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+header{
+  position:relative;
+
+  background:
+    linear-gradient(135deg,#102f5d 0%,#173f7a 55%,#1d4f96 100%);
+
+  color:#fff;
+
+  padding:28px 32px 30px;
+
+  overflow:hidden;
+
+  border-bottom:1px solid rgba(255,255,255,.12);
+
+  box-shadow:0 8px 30px rgba(14,42,82,.16);
+}
+
+header::before{
+  content:"";
+  position:absolute;
+
+  width:280px;
+  height:280px;
+
+  border-radius:50%;
+
+  background:rgba(255,255,255,.045);
+
+  top:-160px;
+  right:180px;
+}
+
+header::after{
+  content:"";
+  position:absolute;
+
+  width:180px;
+  height:180px;
+
+  border-radius:40px;
+
+  background:rgba(247,201,72,.10);
+
+  right:-60px;
+  bottom:-100px;
+
+  transform:rotate(25deg);
+}
+
+header .shapes{
+  position:absolute;
+  inset:0;
+
+  pointer-events:none;
+}
+
+header .shape-circle{
+  position:absolute;
+
+  width:75px;
+  height:75px;
+
+  border-radius:50%;
+
+  background:var(--gelb);
+
+  right:95px;
+  top:-22px;
+
+  opacity:.95;
+}
+
+header .shape-square{
+  position:absolute;
+
+  width:58px;
+  height:58px;
+
+  background:var(--rot);
+
+  right:40px;
+  bottom:-22px;
+
+  border-radius:14px;
+
+  transform:rotate(16deg);
+}
+
+header .shape-tri{
+  position:absolute;
+
+  width:0;
+  height:0;
+
+  border-left:38px solid transparent;
+  border-right:38px solid transparent;
+  border-bottom:64px solid rgba(255,255,255,.9);
+
+  right:145px;
+  top:32px;
+
+  opacity:.75;
+}
+
+.header-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:24px;
+
+  position:relative;
+  z-index:2;
+
+  max-width:1100px;
+  margin:auto;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.brand-icon{
+  width:54px;
+  height:54px;
+
+  background:#fff;
+
+  color:var(--blau);
+
+  border-radius:15px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:25px;
+  font-weight:800;
+
+  box-shadow:0 8px 22px rgba(0,0,0,.16);
+}
+
+header h1{
+  font-size:clamp(25px,4vw,36px);
+
+  font-weight:800;
+
+  margin:0 0 4px;
+
+  letter-spacing:-.7px;
+}
+
+header p.subtitle{
+  margin:0;
+
+  font-size:12px;
+
+  color:#dce7f7;
+
+  letter-spacing:.5px;
+}
+
+/* Connection */
+
+.stamp{
+  flex-shrink:0;
+
+  display:flex;
+  align-items:center;
+  gap:9px;
+
+  font-size:11px;
+  font-weight:600;
+
+  background:rgba(255,255,255,.09);
+
+  border:1px solid rgba(255,255,255,.22);
+
+  border-radius:999px;
+
+  padding:8px 13px 8px 9px;
+
+  backdrop-filter:blur(10px);
+
+  transition:.25s;
+}
+
+.stamp .dot{
+  width:9px;
+  height:9px;
+
+  border-radius:50%;
+
+  background:#98a2b3;
+
+  box-shadow:0 0 0 4px rgba(255,255,255,.08);
+
+  flex-shrink:0;
+}
+
+.stamp[data-state="ok"]{
+  border-color:rgba(75,220,145,.4);
+  background:rgba(34,160,107,.16);
+}
+
+.stamp[data-state="ok"] .dot{
+  background:#4ddd9b;
+
+  box-shadow:
+    0 0 0 4px rgba(75,220,145,.13),
+    0 0 14px rgba(75,220,145,.4);
+}
+
+.stamp[data-state="fail"]{
+  border-color:rgba(255,100,110,.45);
+  background:rgba(230,57,70,.16);
+}
+
+.stamp[data-state="fail"] .dot{
+  background:#ff6974;
+
+  box-shadow:
+    0 0 0 4px rgba(255,100,110,.13);
+}
+
+.stamp[data-state="checking"] .dot{
+  animation:pulse 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse{
+  0%,100%{opacity:1}
+  50%{opacity:.3}
+}
+
+/* =========================================
+   CONTROL BAR
+========================================= */
+
+.controlbar{
+  width:100%;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:15px;
+
+  padding:14px 32px;
+
+  background:rgba(255,255,255,.92);
+
+  border-bottom:1px solid var(--border);
+
+  box-shadow:var(--shadow-sm);
+
+  flex-wrap:wrap;
+
+  z-index:10;
+}
+
+.level-select{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  font-size:11px;
+  font-weight:600;
+
+  color:var(--muted);
+
+  text-transform:uppercase;
+
+  letter-spacing:.6px;
+}
+
+.level-select select{
+  appearance:none;
+
+  font-family:'Poppins',sans-serif;
+
+  font-size:12px;
+  font-weight:600;
+
+  padding:8px 34px 8px 12px;
+
+  border:1px solid var(--border);
+
+  border-radius:10px;
+
+  background:
+    linear-gradient(45deg,transparent 50%,var(--muted) 50%) calc(100% - 15px) 50%/5px 5px no-repeat,
+    linear-gradient(135deg,var(--muted) 50%,transparent 50%) calc(100% - 11px) 50%/5px 5px no-repeat,
+    #fff;
+
+  color:var(--ink);
+
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.level-select select:hover{
+  border-color:#b9c5d8;
+  box-shadow:0 3px 10px rgba(23,32,51,.05);
+}
+
+.level-select select:focus{
+  outline:none;
+  border-color:var(--blau);
+  box-shadow:0 0 0 3px rgba(23,63,122,.10);
+}
+
+.controls-right{
+  display:flex;
+  gap:8px;
+}
+
+button.iconbtn{
+  font-family:'Poppins',sans-serif;
+
+  font-size:11px;
+  font-weight:600;
+
+  border:1px solid var(--border);
+
+  background:#fff;
+
+  color:var(--ink-soft);
+
+  border-radius:10px;
+
+  padding:8px 13px;
+
+  cursor:pointer;
+
+  transition:.2s;
+
+  box-shadow:0 2px 5px rgba(23,32,51,.03);
+}
+
+button.iconbtn:hover{
+  background:var(--blau);
+
+  color:#fff;
+
+  border-color:var(--blau);
+
+  transform:translateY(-1px);
+
+  box-shadow:0 5px 14px rgba(23,63,122,.18);
+}
+
+/* =========================================
+   SETTINGS
+========================================= */
+
+.settings{
+  display:none;
+
+  background:#fff;
+
+  border-bottom:1px solid var(--border);
+
+  padding:20px 32px;
+
+  gap:15px;
+
+  flex-direction:column;
+
+  box-shadow:var(--shadow-sm);
+}
+
+.settings.open{
+  display:flex;
+  animation:settingsIn .2s ease;
+}
+
+@keyframes settingsIn{
+  from{
+    opacity:0;
+    transform:translateY(-6px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.settings .default-note{
+  font-size:12px;
+
+  line-height:1.6;
+
+  color:#566278;
+
+  background:var(--blau-light);
+
+  border:1px solid #d5e1f1;
+
+  padding:12px 14px;
+
+  border-radius:12px;
+}
+
+.settings code{
+  font-family:monospace;
+
+  background:rgba(23,63,122,.07);
+
+  padding:2px 5px;
+
+  border-radius:5px;
+}
+
+.settings label{
+  display:block;
+
+  font-size:11px;
+
+  font-weight:600;
+
+  color:var(--muted);
+
+  margin-bottom:6px;
+}
+
+.settings input[type=text]{
+  width:100%;
+
+  font-family:'Poppins',sans-serif;
+
+  font-size:12px;
+
+  padding:10px 12px;
+
+  border:1px solid var(--border);
+
+  border-radius:10px;
+
+  background:#fafbfc;
+
+  color:var(--ink);
+
+  transition:.2s;
+}
+
+.settings input[type=text]:focus{
+  outline:none;
+
+  background:#fff;
+
+  border-color:var(--blau);
+
+  box-shadow:0 0 0 3px rgba(23,63,122,.09);
+}
+
+.settings .row{
+  display:flex;
+
+  gap:10px;
+
+  align-items:flex-end;
+
+  flex-wrap:wrap;
+}
+
+.settings .row > div{
+  flex:1;
+  min-width:240px;
+}
+
+.settings small{
+  color:var(--muted);
+
+  font-size:10.5px;
+
+  line-height:1.6;
+}
+
+/* =========================================
+   MAIN / CHAT
+========================================= */
+
+main{
+  flex:1;
+
+  display:flex;
+  justify-content:center;
+
+  overflow:hidden;
+
+  position:relative;
+
+  padding:0 15px;
+}
+
+.chat-wrap{
+  width:100%;
+  max-width:900px;
+
+  display:flex;
+  flex-direction:column;
+
+  height:100%;
+
+  position:relative;
+
+  background:rgba(255,255,255,.35);
+}
+
+/* =========================================
+   MESSAGES
+========================================= */
+
+#messages{
+  flex:1;
+
+  overflow-y:auto;
+
+  padding:28px 25px 20px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:16px;
+
+  scroll-behavior:smooth;
+}
+
+#messages::-webkit-scrollbar{
+  width:7px;
+}
+
+#messages::-webkit-scrollbar-thumb{
+  background:#ccd4e0;
+  border-radius:99px;
+}
+
+#messages::-webkit-scrollbar-track{
+  background:transparent;
+}
+
+.msg{
+  max-width:78%;
+
+  padding:14px 17px;
+
+  border-radius:17px;
+
+  font-size:13.5px;
+
+  line-height:1.7;
+
+  white-space:pre-wrap;
+
+  position:relative;
+
+  animation:messageIn .25s ease;
+}
+
+@keyframes messageIn{
+  from{
+    opacity:0;
+    transform:translateY(8px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* Assistant */
+
+.msg.assistant{
+  align-self:flex-start;
+
+  background:#fff;
+
+  color:var(--ink);
+
+  border:1px solid var(--border);
+
+  border-top-left-radius:5px;
+
+  box-shadow:var(--shadow-sm);
+
+  padding-right:48px;
+}
+
+/* User */
+
+.msg.user{
+  align-self:flex-end;
+
+  background:
+    linear-gradient(135deg,var(--blau),#235a9d);
+
+  color:#fff;
+
+  border-top-right-radius:5px;
+
+  box-shadow:0 8px 22px rgba(23,63,122,.18);
+}
+
+.msg-meta{
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  font-size:9px;
+
+  font-weight:600;
+
+  letter-spacing:.5px;
+
+  text-transform:uppercase;
+
+  opacity:.55;
+
+  margin-bottom:6px;
+}
+
+.msg.user .msg-meta{
+  justify-content:flex-end;
+}
+
+.msg-meta .level-chip{
+  background:var(--gelb);
+
+  color:#3c3200;
+
+  padding:2px 7px;
+
+  border-radius:999px;
+
+  opacity:1;
+
+  font-size:8px;
+
+  font-weight:700;
+}
+
+.msg.user .msg-meta .level-chip{
+  background:rgba(255,255,255,.9);
+
+  color:var(--blau);
+}
+
+/* Copy */
+
+.copy-btn{
+  position:absolute;
+
+  top:9px;
+  right:9px;
+
+  background:#f3f5f8;
+
+  border:1px solid var(--border);
+
+  border-radius:7px;
+
+  font-family:'Poppins',sans-serif;
+
+  font-size:9px;
+
+  font-weight:600;
+
+  color:var(--muted);
+
+  cursor:pointer;
+
+  opacity:0;
+
+  transition:.2s;
+
+  padding:4px 7px;
+}
+
+.msg.assistant:hover .copy-btn{
+  opacity:1;
+}
+
+.copy-btn:hover{
+  background:var(--blau);
+  color:#fff;
+}
+
+/* =========================================
+   ERROR
+========================================= */
+
+.msg.error{
+  align-self:center;
+
+  max-width:88%;
+
+  background:var(--rot-light);
+
+  border:1px solid #f5b7bc;
+
+  color:#8a2630;
+
+  font-size:11.5px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:9px;
+
+  border-radius:14px;
+
+  box-shadow:0 5px 18px rgba(230,57,70,.08);
+}
+
+.msg.error .err-title{
+  font-weight:700;
+
+  color:var(--rot);
+
+  text-transform:uppercase;
+
+  letter-spacing:.6px;
+
+  font-size:9px;
+}
+
+.msg.error button.retry{
+  align-self:flex-start;
+
+  font-family:'Poppins',sans-serif;
+
+  font-size:10px;
+
+  font-weight:600;
+
+  background:var(--rot);
+
+  color:#fff;
+
+  border:none;
+
+  border-radius:8px;
+
+  padding:7px 12px;
+
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.msg.error button.retry:hover{
+  background:#c92f3a;
+
+  transform:translateY(-1px);
+}
+
+/* =========================================
+   TYPING
+========================================= */
+
+.typing{
+  align-self:flex-start;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:5px;
+
+  padding:14px 16px;
+
+  border:1px solid var(--border);
+
+  background:#fff;
+
+  border-radius:15px;
+
+  border-top-left-radius:5px;
+
+  box-shadow:var(--shadow-sm);
+}
+
+.typing span{
+  width:6px;
+  height:6px;
+
+  border-radius:50%;
+
+  background:var(--blau);
+
+  animation:bounce 1.2s infinite ease-in-out;
+}
+
+.typing span:nth-child(2){
+  animation-delay:.15s;
+}
+
+.typing span:nth-child(3){
+  animation-delay:.3s;
+}
+
+@keyframes bounce{
+  0%,60%,100%{
+    transform:translateY(0);
+    opacity:.35;
+  }
+
+  30%{
+    transform:translateY(-5px);
+    opacity:1;
+  }
+}
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.empty-state{
+  margin:auto;
+
+  text-align:center;
+
+  color:var(--muted);
+
+  padding:45px 20px;
+
+  max-width:600px;
+}
+
+.empty-logo{
+  width:72px;
+  height:72px;
+
+  margin:0 auto 20px;
+
+  border-radius:22px;
+
+  background:
+    linear-gradient(135deg,var(--blau),#285fa4);
+
+  color:#fff;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  font-size:32px;
+
+  font-weight:800;
+
+  box-shadow:
+    0 12px 25px rgba(23,63,122,.20),
+    0 0 0 8px rgba(23,63,122,.05);
+}
+
+.empty-state h2{
+  font-size:24px;
+
+  font-weight:800;
+
+  margin:0 0 9px;
+
+  color:var(--ink);
+
+  letter-spacing:-.5px;
+}
+
+.empty-state h2 span{
+  color:var(--blau);
+}
+
+.empty-state p{
+  font-size:13px;
+
+  line-height:1.75;
+
+  margin:0 auto 24px;
+
+  max-width:520px;
+}
+
+.suggestions{
+  display:grid;
+
+  grid-template-columns:repeat(3,1fr);
+
+  gap:10px;
+}
+
+.chip-suggest{
+  font-family:'Poppins',sans-serif;
+
+  font-size:10.5px;
+
+  font-weight:600;
+
+  text-align:left;
+
+  background:#fff;
+
+  border:1px solid var(--border);
+
+  border-radius:13px;
+
+  padding:13px;
+
+  cursor:pointer;
+
+  color:var(--ink-soft);
+
+  transition:.22s;
+
+  box-shadow:var(--shadow-sm);
+}
+
+.chip-suggest:hover{
+  border-color:#b9c9df;
+
+  background:var(--blau-light);
+
+  color:var(--blau);
+
+  transform:translateY(-3px);
+
+  box-shadow:0 8px 18px rgba(23,63,122,.10);
+}
+
+/* =========================================
+   SCROLL BUTTON
+========================================= */
+
+#scrollFab{
+  position:absolute;
+
+  bottom:100px;
+  right:25px;
+
+  width:42px;
+  height:42px;
+
+  border-radius:50%;
+
+  background:#fff;
+
+  color:var(--blau);
+
+  border:1px solid var(--border);
+
+  cursor:pointer;
+
+  display:none;
+
+  align-items:center;
+  justify-content:center;
+
+  font-size:17px;
+
+  box-shadow:var(--shadow);
+
+  z-index:5;
+
+  transition:.2s;
+}
+
+#scrollFab.show{
+  display:flex;
+}
+
+#scrollFab:hover{
+  transform:translateY(-3px);
+
+  background:var(--blau);
+
+  color:#fff;
+}
+
+/* =========================================
+   COMPOSER
+========================================= */
+
+form#composer{
+  display:flex;
+
+  gap:10px;
+
+  padding:14px 18px 18px;
+
+  background:rgba(255,255,255,.94);
+
+  border:1px solid var(--border);
+
+  border-radius:18px 18px 0 0;
+
+  box-shadow:0 -8px 25px rgba(23,32,51,.06);
+
+  backdrop-filter:blur(15px);
+}
+
+textarea#input{
+  flex:1;
+
+  resize:none;
+
+  font-family:'Poppins',sans-serif;
+
+  font-size:13px;
+
+  padding:12px 14px;
+
+  border:1px solid var(--border);
+
+  border-radius:13px;
+
+  background:#f8fafc;
+
+  color:var(--ink);
+
+  line-height:1.5;
+
+  max-height:120px;
+
+  transition:.2s;
+}
+
+textarea#input::placeholder{
+  color:#9aa5b5;
+}
+
+textarea#input:focus{
+  outline:none;
+
+  background:#fff;
+
+  border-color:var(--blau);
+
+  box-shadow:0 0 0 3px rgba(23,63,122,.08);
+}
+
+button#send{
+  min-width:115px;
+
+  font-family:'Poppins',sans-serif;
+
+  font-weight:700;
+
+  font-size:12px;
+
+  background:
+    linear-gradient(135deg,var(--rot),#d92836);
+
+  color:#fff;
+
+  border:0;
+
+  border-radius:13px;
+
+  padding:0 19px;
+
+  cursor:pointer;
+
+  transition:.2s;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:8px;
+
+  box-shadow:0 7px 18px rgba(230,57,70,.20);
+}
+
+button#send:hover{
+  transform:translateY(-2px);
+
+  box-shadow:0 10px 24px rgba(230,57,70,.27);
+}
+
+button#send:active{
+  transform:translateY(0);
+}
+
+button#send:disabled{
+  opacity:.55;
+
+  cursor:not-allowed;
+
+  transform:none;
+
+  box-shadow:none;
+}
+
+.spinner{
+  width:14px;
+  height:14px;
+
+  border:2px solid rgba(255,255,255,.4);
+
+  border-top-color:#fff;
+
+  border-radius:50%;
+
+  animation:spin .7s linear infinite;
+
+  display:none;
+}
+
+button#send.loading .spinner{
+  display:inline-block;
+}
+
+button#send.loading .send-label{
+  display:none;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+select:focus-visible,
+button:focus-visible,
+textarea:focus-visible,
+input:focus-visible{
+  outline:3px solid rgba(247,201,72,.75);
+
+  outline-offset:2px;
+}
+
+@media (prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition:none !important;
+  }
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media(max-width:760px){
+
+  header{
+    padding:22px 20px 24px;
+  }
+
+  .header-top{
+    align-items:flex-start;
+  }
+
+  .controlbar{
+    padding:12px 20px;
+  }
+
+  .settings{
+    padding:16px 20px;
+  }
+
+  #messages{
+    padding:22px 15px 18px;
+  }
+
+  .suggestions{
+    grid-template-columns:1fr;
+  }
+
+  .msg{
+    max-width:88%;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width:600px){
+
+  header{
+    padding:18px 16px 20px;
+  }
+
+  .header-top{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:15px;
+  }
+
+  .brand-icon{
+    width:46px;
+    height:46px;
+
+    border-radius:13px;
+
+    font-size:21px;
+  }
+
+  header h1{
+    font-size:25px;
+  }
+
+  header p.subtitle{
+    font-size:9.5px;
+
+    max-width:270px;
+
+    line-height:1.5;
+  }
+
+  .stamp{
+    align-self:flex-start;
+  }
+
+  .controlbar{
+    padding:10px 14px;
+
+    gap:8px;
+  }
+
+  .level-select{
+    flex:1;
+  }
+
+  .level-select select{
+    flex:1;
+  }
+
+  .controls-right{
+    width:100%;
+  }
+
+  .controls-right button{
+    flex:1;
+  }
+
+  .settings{
+    padding:14px;
+  }
+
+  .settings .row{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .settings .row > div{
+    min-width:100%;
+  }
+
+  .settings .row button{
+    width:100%;
+  }
+
+  main{
+    padding:0;
+  }
+
+  #messages{
+    padding:18px 12px 15px;
+  }
+
+  .msg{
+    max-width:94%;
+
+    font-size:12.5px;
+
+    padding:12px 14px;
+  }
+
+  .msg.assistant{
+    padding-right:42px;
+  }
+
+  .empty-state{
+    padding:30px 12px;
+  }
+
+  .empty-logo{
+    width:62px;
+    height:62px;
+
+    font-size:27px;
+  }
+
+  .empty-state h2{
+    font-size:21px;
+  }
+
+  .empty-state p{
+    font-size:11.5px;
+  }
+
+  form#composer{
+    padding:10px;
+
+    border-radius:15px 15px 0 0;
+  }
+
+  textarea#input{
+    font-size:12px;
+
+    padding:11px;
+  }
+
+  button#send{
+    min-width:72px;
+
+    padding:0 13px;
+
+    font-size:11px;
+  }
+
+  #scrollFab{
+    right:15px;
+    bottom:90px;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="shapes">
+    <div class="shape-circle"></div>
+    <div class="shape-square"></div>
+    <div class="shape-tri"></div>
+  </div>
+
+  <div class="header-top">
+
+    <div class="brand">
+
+      <div class="brand-icon">
+        DE
+      </div>
+
+      <div>
+        <h1>Deutsch Lernen</h1>
+
+        <p class="subtitle">
+          Assistant IA · Grammatik · Wortschatz · Übungen
+        </p>
+      </div>
+
+    </div>
+
+    <div
+      class="stamp"
+      id="connStamp"
+      data-state="checking"
+      title="Statut de connexion au workflow n8n"
+    >
+      <span class="dot"></span>
+      <span id="connLabel">Vérification…</span>
+    </div>
+
+  </div>
+
+</header>
+
+
+<div class="controlbar">
+
+  <div class="level-select">
+    <span>Mode</span>
+
+    <select id="mode">
+      <option value="chat">Chat</option>
+      <option value="translate">Traduction</option>
+    </select>
+  </div>
+
+
+  <div class="level-select">
+    <span>Niveau</span>
+
+    <select id="level">
+      <option value="A1">A1</option>
+      <option value="A2">A2</option>
+      <option value="B1">B1</option>
+      <option value="B2">B2</option>
+      <option value="C1">C1</option>
+      <option value="C2">C2</option>
+    </select>
+  </div>
+
+
+  <div class="controls-right">
+
+    <button
+      class="iconbtn"
+      id="clearBtn"
+      type="button"
+    >
+      Effacer
+    </button>
+
+    <button
+      class="iconbtn"
+      id="settingsBtn"
+      type="button"
+    >
+      Réglages
+    </button>
+
+  </div>
+
+</div>
+
+
+<div class="settings" id="settingsPanel">
+
+  <div class="default-note">
+
+    <strong>⚙ Configuration n8n</strong><br>
+
+    Le webhook est déjà configuré par défaut :
+
+    <code>http://localhost:5678/webhook/rag-deutsch-chat</code>.
+
+    Ne modifiez ci-dessous que si vous utilisez une autre adresse
+    (ex. n8n déployé en ligne).
+
+  </div>
+
+
+  <div class="row">
+
+    <div>
+
+      <label for="webhookUrl">
+        URL du Webhook n8n (facultatif)
+      </label>
+
+      <input
+        type="text"
+        id="webhookUrl"
+        placeholder="http://localhost:5678/webhook/rag-deutsch-chat"
+      >
+
+    </div>
+
+
+    <button
+      class="iconbtn"
+      id="saveSettings"
+      type="button"
+    >
+      Enregistrer
+    </button>
+
+
+    <button
+      class="iconbtn"
+      id="resetSettings"
+      type="button"
+    >
+      Réinitialiser
+    </button>
+
+  </div>
+
+
+  <small>
+    Cette page doit être ouverte sur le même ordinateur que votre instance
+    n8n locale pour que <code>localhost</code> fonctionne. Si
+    "Vérification…" reste bloqué sur "Hors ligne", vérifiez que le workflow
+    est actif et que CORS est autorisé sur le node Webhook
+    (Access-Control-Allow-Origin).
+  </small>
+
+</div>
+
+
+<main>
+
+  <div class="chat-wrap">
+
+    <div id="messages">
+
+      <div class="empty-state" id="emptyState">
+
+        <div class="empty-logo">
+          DE
+        </div>
+
+        <h2>
+          Willkommen<span>!</span>
+        </h2>
+
+        <p>
+          Posez une question de grammaire, demandez du vocabulaire,
+          ou entraînez-vous à converser en allemand.
+          Choisissez votre niveau pour obtenir des réponses adaptées.
+        </p>
+
+
+        <div class="suggestions">
+
+          <button
+            class="chip-suggest"
+            type="button"
+            data-fill="Erkläre mir den Unterschied zwischen &quot;der, die, das&quot;."
+          >
+            🇩🇪 Der / die / das
+          </button>
+
+
+          <button
+            class="chip-suggest"
+            type="button"
+            data-fill="Gib mir 5 nützliche Wörter zum Thema Essen."
+          >
+            📚 Wortschatz: Essen
+          </button>
+
+
+          <button
+            class="chip-suggest"
+            type="button"
+            data-fill="Können wir ein kurzes Gespräch auf Deutsch üben?"
+          >
+            💬 Gespräch üben
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <button
+      id="scrollFab"
+      type="button"
+      title="Aller aux derniers messages"
+    >
+      ↓
+    </button>
+
+
+    <form id="composer">
+
+      <textarea
+        id="input"
+        rows="1"
+        placeholder="Écrivez votre message… (Entrée pour envoyer, Maj+Entrée pour une nouvelle ligne)"
+      ></textarea>
+
+
+      <button
+        type="submit"
+        id="send"
+      >
+
+        <span class="spinner"></span>
+
+        <span class="send-label">
+          Envoyer
+        </span>
+
+      </button>
+
+    </form>
+
+  </div>
+
+</main>
+
+
+<script>
+
+(function(){
+
+  // Default webhook is hardcoded here — no setup required out of the box.
+  const DEFAULT_WEBHOOK_URL =
+    'http://localhost:5678/webhook/rag-deutsch-chat';
+
+
+  const messagesEl =
+    document.getElementById('messages');
+
+  const emptyState =
+    document.getElementById('emptyState');
+
+  const form =
+    document.getElementById('composer');
+
+  const input =
+    document.getElementById('input');
+
+  const sendBtn =
+    document.getElementById('send');
+
+  const levelSel =
+    document.getElementById('level');
+
+  const settingsBtn =
+    document.getElementById('settingsBtn');
+
+  const settingsPanel =
+    document.getElementById('settingsPanel');
+
+  const webhookInput =
+    document.getElementById('webhookUrl');
+
+  const saveSettingsBtn =
+    document.getElementById('saveSettings');
+
+  const resetSettingsBtn =
+    document.getElementById('resetSettings');
+
+  const clearBtn =
+    document.getElementById('clearBtn');
+
+  const modeSel =
+    document.getElementById('mode');
+
+  const connStamp =
+    document.getElementById('connStamp');
+
+  const connLabel =
+    document.getElementById('connLabel');
+
+  const scrollFab =
+    document.getElementById('scrollFab');
+
+
+  // --- Session & réglages persistants ---
+
+  let sessionId =
+    localStorage.getItem('deutsch_sessionId');
+
+
+  if(!sessionId){
+
+    sessionId =
+      (crypto.randomUUID
+        ? crypto.randomUUID()
+        : String(Date.now()) + Math.random()
+      );
+
+    localStorage.setItem(
+      'deutsch_sessionId',
+      sessionId
+    );
+
+  }
+
+
+  function getWebhookUrl(){
+
+    const override =
+      (localStorage.getItem('deutsch_webhookUrl') || '').trim();
+
+    return override || DEFAULT_WEBHOOK_URL;
+
+  }
+
+
+  webhookInput.value =
+    localStorage.getItem('deutsch_webhookUrl') || '';
+
+
+  const savedMode =
+    localStorage.getItem('deutsch_mode');
+
+
+  if(savedMode === 'chat' || savedMode === 'translate'){
+    modeSel.value = savedMode;
+  }
+
+
+  modeSel.addEventListener('change', () => {
+
+    localStorage.setItem(
+      'deutsch_mode',
+      modeSel.value
+    );
+
+    input.placeholder =
+      modeSel.value === 'translate'
+        ? 'Texte à traduire… (Entrée pour envoyer, Maj+Entrée pour une nouvelle ligne)'
+        : 'Écrivez votre message… (Entrée pour envoyer, Maj+Entrée pour une nouvelle ligne)';
+
+  });
+
+
+  const savedLevel =
+    localStorage.getItem('deutsch_level');
+
+
+  if(savedLevel){
+    levelSel.value = savedLevel;
+  }
+
+
+  levelSel.addEventListener('change', () => {
+
+    localStorage.setItem(
+      'deutsch_level',
+      levelSel.value
+    );
+
+  });
+
+
+  settingsBtn.addEventListener('click', () => {
+
+    settingsPanel.classList.toggle('open');
+
+  });
+
+
+  saveSettingsBtn.addEventListener('click', () => {
+
+    localStorage.setItem(
+      'deutsch_webhookUrl',
+      webhookInput.value.trim()
+    );
+
+    settingsPanel.classList.remove('open');
+
+    checkConnection();
+
+  });
+
+
+  resetSettingsBtn.addEventListener('click', () => {
+
+    localStorage.removeItem(
+      'deutsch_webhookUrl'
+    );
+
+    webhookInput.value = '';
+
+    checkConnection();
+
+  });
+
+
+  clearBtn.addEventListener('click', () => {
+
+    messagesEl
+      .querySelectorAll('.msg, .typing')
+      .forEach(el => el.remove());
+
+
+    if(!messagesEl.contains(emptyState)){
+      messagesEl.appendChild(emptyState);
+    }
+
+
+    emptyState.style.display = 'block';
+
+
+    sessionId =
+      (crypto.randomUUID
+        ? crypto.randomUUID()
+        : String(Date.now()) + Math.random()
+      );
+
+
+    localStorage.setItem(
+      'deutsch_sessionId',
+      sessionId
+    );
+
+
+    localStorage.removeItem(
+      'deutsch_history'
+    );
+
+  });
+
+
+  document
+    .querySelectorAll('.chip-suggest')
+    .forEach(btn => {
+
+      btn.addEventListener('click', () => {
+
+        input.value =
+          btn.getAttribute('data-fill');
+
+        input.dispatchEvent(
+          new Event('input')
+        );
+
+        input.focus();
+
+      });
+
+    });
+
+
+  // --- Auto-resize du textarea ---
+
+  input.addEventListener('input', () => {
+
+    input.style.height = 'auto';
+
+    input.style.height =
+      Math.min(input.scrollHeight, 120) + 'px';
+
+  });
+
+
+  input.addEventListener('keydown', (e) => {
+
+    if(e.key === 'Enter' && !e.shiftKey){
+
+      e.preventDefault();
+
+      form.requestSubmit();
+
+    }
+
+  });
+
+
+  // --- Scroll handling ---
+
+  messagesEl.addEventListener('scroll', () => {
+
+    const distanceFromBottom =
+      messagesEl.scrollHeight -
+      messagesEl.scrollTop -
+      messagesEl.clientHeight;
+
+
+    scrollFab.classList.toggle(
+      'show',
+      distanceFromBottom > 200
+    );
+
+  });
+
+
+  scrollFab.addEventListener('click', () => {
+
+    messagesEl.scrollTo({
+      top:messagesEl.scrollHeight,
+      behavior:'smooth'
+    });
+
+  });
+
+
+  function fmtTime(){
+
+    return new Date().toLocaleTimeString(
+      'fr-FR',
+      {
+        hour:'2-digit',
+        minute:'2-digit'
+      }
+    );
+
+  }
+
+
+  function addMessage(text, role, level){
+
+    if(emptyState.parentNode){
+      emptyState.style.display = 'none';
+    }
+
+
+    const div =
+      document.createElement('div');
+
+    div.className =
+      'msg ' + role;
+
+
+    const meta =
+      document.createElement('div');
+
+    meta.className =
+      'msg-meta';
+
+
+    const tag =
+      document.createElement('span');
+
+    tag.textContent =
+      role === 'user'
+        ? 'Vous'
+        : 'Lehrer';
+
+
+    meta.appendChild(tag);
+
+
+    if(level){
+
+      const chip =
+        document.createElement('span');
+
+      chip.className =
+        'level-chip';
+
+      chip.textContent =
+        level;
+
+      meta.appendChild(chip);
+
+    }
+
+
+    const time =
+      document.createElement('span');
+
+    time.textContent =
+      fmtTime();
+
+    meta.appendChild(time);
+
+
+    div.appendChild(meta);
+
+
+    const body =
+      document.createElement('div');
+
+    body.textContent =
+      text;
+
+    div.appendChild(body);
+
+
+    if(role === 'assistant'){
+
+      const copyBtn =
+        document.createElement('button');
+
+      copyBtn.className =
+        'copy-btn';
+
+      copyBtn.type =
+        'button';
+
+      copyBtn.textContent =
+        'Copier';
+
+
+      copyBtn.addEventListener(
+        'click',
+        () => {
+
+          navigator.clipboard
+            .writeText(text)
+            .then(() => {
+
+              copyBtn.textContent =
+                'Copié ✓';
+
+              setTimeout(
+                () => copyBtn.textContent = 'Copier',
+                1500
+              );
+
+            });
+
+        }
+      );
+
+
+      div.appendChild(copyBtn);
+
+    }
+
+
+    messagesEl.appendChild(div);
+
+    messagesEl.scrollTop =
+      messagesEl.scrollHeight;
+
+
+    return div;
+
+  }
+
+
+  function addErrorMessage(
+    title,
+    detail,
+    retryFn
+  ){
+
+    if(emptyState.parentNode){
+      emptyState.style.display = 'none';
+    }
+
+
+    const div =
+      document.createElement('div');
+
+    div.className =
+      'msg error';
+
+
+    const titleEl =
+      document.createElement('div');
+
+    titleEl.className =
+      'err-title';
+
+    titleEl.textContent =
+      title;
+
+    div.appendChild(titleEl);
+
+
+    const detailEl =
+      document.createElement('div');
+
+    detailEl.textContent =
+      detail;
+
+    div.appendChild(detailEl);
+
+
+    if(retryFn){
+
+      const retryBtn =
+        document.createElement('button');
+
+      retryBtn.className =
+        'retry';
+
+      retryBtn.type =
+        'button';
+
+      retryBtn.textContent =
+        'Réessayer';
+
+
+      retryBtn.addEventListener(
+        'click',
+        () => {
+
+          div.remove();
+
+          retryFn();
+
+        }
+      );
+
+
+      div.appendChild(retryBtn);
+
+    }
+
+
+    messagesEl.appendChild(div);
+
+    messagesEl.scrollTop =
+      messagesEl.scrollHeight;
+
+  }
+
+
+  function addTyping(){
+
+    const div =
+      document.createElement('div');
+
+    div.className =
+      'typing';
+
+    div.id =
+      'typingIndicator';
+
+
+    div.innerHTML =
+      '<span></span><span></span><span></span>';
+
+
+    messagesEl.appendChild(div);
+
+    messagesEl.scrollTop =
+      messagesEl.scrollHeight;
+
+  }
+
+
+  function removeTyping(){
+
+    const el =
+      document.getElementById(
+        'typingIndicator'
+      );
+
+    if(el){
+      el.remove();
+    }
+
+  }
+
+
+  async function sendMessage(text){
+
+    const url =
+      getWebhookUrl();
+
+    const level =
+      levelSel.value;
+
+
+    addMessage(
+      text,
+      'user',
+      level
+    );
+
+
+    sendBtn.disabled =
+      true;
+
+    sendBtn.classList.add(
+      'loading'
+    );
+
+
+    addTyping();
+
+
+    try{
+
+      const controller =
+        new AbortController();
+
+
+      const timeout =
+        setTimeout(
+          () => controller.abort(),
+          30000
+        );
+
+
+      const mode =
+        modeSel.value;
+
+
+      const res =
+        await fetch(
+          url,
+          {
+            method:'POST',
+
+            headers:{
+              'Content-Type':
+                'application/json'
+            },
+
+            body:JSON.stringify({
+
+              action:mode,
+
+              message:text,
+
+              sessionId:sessionId,
+
+              level:level
+
+            }),
+
+            signal:controller.signal
+
+          }
+        );
+
+
+      clearTimeout(timeout);
+
+      removeTyping();
+
+      setConn('ok');
+
+
+      if(!res.ok){
+
+        addErrorMessage(
+
+          'Erreur serveur (' +
+          res.status +
+          ')',
+
+          'Le workflow n8n a répondu mais avec une erreur. Vérifiez les logs d’exécution dans n8n.',
+
+          () => sendMessage(text)
+
+        );
+
+      }else{
+
+        const data =
+          await res.json();
+
+
+        const reply =
+          data.reply ||
+          data.output ||
+          (
+            typeof data === 'string'
+              ? data
+              : JSON.stringify(data)
+          );
+
+
+        addMessage(
+          reply,
+          'assistant',
+          level
+        );
+
+      }
+
+
+    }catch(err){
+
+      removeTyping();
+
+      setConn('fail');
+
+
+      const isAbort =
+        err &&
+        err.name === 'AbortError';
+
+
+      addErrorMessage(
+
+        isAbort
+          ? 'Délai dépassé'
+          : 'Connexion impossible',
+
+        isAbort
+          ? 'Le workflow n8n n\'a pas répondu après 30 secondes. Vérifiez qu\'il n\'est pas bloqué sur un nœud.'
+          : 'Impossible de joindre ' +
+            url +
+            '. Vérifiez que n8n tourne, que le workflow est actif, et que CORS (Access-Control-Allow-Origin) est autorisé sur le node Webhook.',
+
+        () => sendMessage(text)
+
+      );
+
+
+    }finally{
+
+      sendBtn.disabled =
+        false;
+
+      sendBtn.classList.remove(
+        'loading'
+      );
+
+      input.focus();
+
+    }
+
+  }
+
+
+  form.addEventListener(
+    'submit',
+    (e) => {
+
+      e.preventDefault();
+
+
+      const text =
+        input.value.trim();
+
+
+      if(!text){
+        return;
+      }
+
+
+      input.value = '';
+
+      input.style.height =
+        'auto';
+
+
+      sendMessage(text);
+
+    }
+  );
+
+
+  // --- Vérification de connexion ---
+
+  function setConn(
+    state,
+    label
+  ){
+
+    connStamp.setAttribute(
+      'data-state',
+      state
+    );
+
+
+    connLabel.textContent =
+      label ||
+      (
+        state === 'ok'
+          ? 'En ligne'
+          : state === 'fail'
+            ? 'Hors ligne'
+            : 'Vérification…'
+      );
+
+  }
+
+
+  async function checkConnection(){
+
+    setConn('checking');
+
+
+    const url =
+      getWebhookUrl();
+
+
+    try{
+
+      const controller =
+        new AbortController();
+
+
+      const timeout =
+        setTimeout(
+          () => controller.abort(),
+          4000
+        );
+
+
+      await fetch(
+        url,
+        {
+          method:'OPTIONS',
+          signal:controller.signal
+        }
+      ).catch(() => {
+
+        throw new Error(
+          'unreachable'
+        );
+
+      });
+
+
+      clearTimeout(timeout);
+
+      setConn('ok');
+
+
+    }catch(_e){
+
+      setConn(
+        'checking',
+        'Statut inconnu — envoyez un message'
+      );
+
+    }
+
+  }
+
+
+  // Set initial placeholder
+
+  input.placeholder =
+    modeSel.value === 'translate'
+      ? 'Texte à traduire… (Entrée pour envoyer, Maj+Entrée pour une nouvelle ligne)'
+      : 'Écrivez votre message… (Entrée pour envoyer, Maj+Entrée pour une nouvelle ligne)';
+
+
+  checkConnection();
+
+})();
+
+</script>
+
+</body>
+</html>
