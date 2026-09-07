@@ -10,6 +10,8 @@ The project combines **n8n workflows**, **AI agents**, **Supabase Vector Store**
 
 * [Overview](#-overview)
 * [Project Goals](#-project-goals)
+* [Website Preview](#-website-preview)
+* [Demo](#-demo)
 * [Architecture](#-architecture)
 * [Main Components](#-main-components)
 * [n8n Workflow](#-n8n-workflow)
@@ -48,8 +50,21 @@ The assistant can:
 * 💡 Give examples and explanations adapted to the learner's level
 
 The backend logic is orchestrated by **n8n**.
+---
+
+# 🖥️ Website Preview
+
+The main objectives are:
+
+<p align="center"> <img src="final interface.png" width="45%" /> <img src="screenshots/chat.png" width="45%" /> </p>
+
+<p align="center"> <img src="screenshots/translation.png" width="45%" /> <img src="whole workflow.png" width="45%" /> </p>
+
 
 ---
+## 🎥 Demo
+
+[▶️ Watch the project demo](demo/demo.mp4)
 
 # 🎯 Project Goals
 
