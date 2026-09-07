@@ -64,7 +64,7 @@ The main objectives are:
 
 <img src="Screens/chat.png" width="100%" />
 
-###  Translate Workflow
+###  Translate Interface
 
 <img src="Screens/translate.png" width="100%" />
 
