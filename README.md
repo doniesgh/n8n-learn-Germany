@@ -60,6 +60,16 @@ The main objectives are:
 
 <img src="Screens/final interface.png" width="100%" />
 
+###  Chat Interface
+
+<img src="Screens/chat.png" width="100%" />
+
+###  Translate Workflow
+
+<img src="Screens/translate.png" width="100%" />
+
+
+
 ###  Whole Workflow
 
 <img src="Screens/whole workflow.png" width="100%" />
