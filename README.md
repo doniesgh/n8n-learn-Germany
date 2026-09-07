@@ -56,9 +56,9 @@ The backend logic is orchestrated by **n8n**.
 
 The main objectives are:
 
-<p align="center"> <img src="final interface.png" width="45%" /> 
+ <img src="Screens/final interface.png" width="100%" /> 
 
-<img src="whole workflow.png" width="45%" /> </p>
+<img src="Screens/fwhole workflow.png" width="45%" /> 
 
 
 ---
