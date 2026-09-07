@@ -56,9 +56,13 @@ The backend logic is orchestrated by **n8n**.
 
 The main objectives are:
 
- <img src="Screens/final interface.png" width="100%" /> 
+### Final Interface
 
-<img src="Screens/fwhole workflow.png" width="45%" /> 
+<img src="Screens/final interface.png" width="100%" />
+
+###  Whole Workflow
+
+<img src="Screens/whole workflow.png" width="100%" />
 
 
 ---
